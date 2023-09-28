@@ -1,0 +1,21 @@
+{
+	"formatVersion" : 1,
+	"passTypeIdentifier" : "pass.com.skyive.app",
+	"teamIdentifier" : "PVY2777K6Y",
+	"serialNumber" : "12345",
+	"barcode" : {
+		"message" : "https://downloads.timoliver.com.au/tim-businesscard.pkpass",
+		"format" : "PKBarcodeFormatQR",
+		"messageEncoding" : "iso-8859-1"
+	},
+	"organizationName" : "Skyive",
+	"description" : "SkyiveBusinessCard",
+	"foregroundColor" : "rgb(255, 255, 255)",
+	"backgroundColor" : "rgb(20, 20, 20)",
+	"labelColor" : "rgb(190, 57, 57)",
+	"generic": {
+		"primaryFields":[],
+		"secondaryFields":[],
+		"auxiliaryFields":[]
+	}
+}
