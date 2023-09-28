@@ -71,10 +71,10 @@ app.post('/pass', async (req, res) => {
         fs.writeFileSync(`${passName}.pkpass`, buffer);
         console.log("Pass created successfully");
 
-        // res.setHeader('Content-Type', 'application/vnd.apple.pkpass');
-        // res.setHeader('Content-Disposition', 'attachment; filename=pass.pkpass');
-        // res.send(buffer);
-        res.json({"msg":'created.'})
+        res.setHeader('Content-Type', 'application/vnd.apple.pkpass');
+        res.setHeader('Content-Disposition', `attachment; filename=${passName}.pkpass`);
+        res.send(buffer);
+        // res.json({"msg":'created.'})
     }
     catch (error) {
         console.error('Error creating pass:', error);
