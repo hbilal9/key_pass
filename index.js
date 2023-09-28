@@ -4,8 +4,8 @@ const fs = require("fs");
 const path = require("path");
 
 const wwdr = fs.readFileSync(path.resolve(__dirname, "./wwdr.pem"));
-const signerCert = fs.readFileSync(path.resolve(__dirname, "./cert.pem"));
-const signerKey = fs.readFileSync(path.resolve(__dirname, "./key.pem"));
+const signerCert = fs.readFileSync(path.resolve(__dirname, "./signerCert.pem"));
+const signerKey = fs.readFileSync(path.resolve(__dirname, "./signerKey.pem"));
 
 const app = express();
 const port = 3000;
