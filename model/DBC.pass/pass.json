@@ -10,10 +10,11 @@
 	},
 	"organizationName" : "Skyive",
 	"description" : "SkyiveBusinessCard",
-	"foregroundColor" : "rgb(255, 255, 255)",
-	"backgroundColor" : "rgb(20, 20, 20)",
-	"labelColor" : "rgb(190, 57, 57)",
+	"foregroundColor" : "rgb(0, 0, 0)",
+	"backgroundColor" : "rgb(224, 224, 224)",
+	"labelColor" : "rgb(153, 51, 255)",
 	"generic": {
+		"headerFields":[],
 		"primaryFields":[],
 		"secondaryFields":[],
 		"auxiliaryFields":[]
