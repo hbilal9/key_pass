@@ -78,7 +78,7 @@ app.post('/pass', async (req, res) => {
     }
     catch (error) {
         console.error('Error creating pass:', error);
-        res.status(500).send('An error occurred while creating the pass. : ', error);
+        res.status(500).send('An error occurred while creating the pass. : ', error.toString());
     }
 });
 
