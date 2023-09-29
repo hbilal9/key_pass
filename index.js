@@ -68,7 +68,7 @@ app.post('/pass', async (req, res) => {
         const passName = Date.now() * 1000 * Math.floor(Math.random() * 9999);
 
         // storage to local file
-        fs.writeFileSync(`${passName}.pkpass`, buffer);
+        // fs.writeFileSync(`${passName}.pkpass`, buffer);
         console.log("Pass created successfully");
 
         res.setHeader('Content-Type', 'application/vnd.apple.pkpass');
