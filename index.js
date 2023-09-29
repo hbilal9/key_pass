@@ -3,6 +3,7 @@ const { PKPass } = require("passkit-generator");
 const fs = require("fs");
 const path = require("path");
 const axios = require('axios');
+const cors = require('cors');
 
 
 const wwdr = fs.readFileSync(path.resolve(__dirname, "./wwdr.pem"));
@@ -13,6 +14,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.json({"test":'Hello World!'});
@@ -21,7 +23,26 @@ app.get('/', (req, res) => {
 app.post('/pass', async (req, res) => {
     try{
         const { primary_fields, secondary_fields, auxiliary_fields, thumbnail, logo, card_url  } = req.body;
-        console.log(req.body);
+        
+        const errors = [];
+        const expectedFields = ['primary_fields', 'secondary_fields', 'auxiliary_fields', 'thumbnail', 'logo', 'card_url'];
+
+        expectedFields.forEach((fieldName) => {
+            if (!req.body.hasOwnProperty(fieldName)) {
+              errors[fieldName] = [`${fieldName} is required`];
+            } else if (fieldName === 'thumbnail' || fieldName === 'logo' || fieldName === 'card_url') {
+              if (typeof req.body[fieldName] !== 'string' || req.body[fieldName].trim() === '') {
+                errors[fieldName] = [`${fieldName} must be a non-empty string`];
+              }
+            } else if (typeof req.body[fieldName] !== 'object' || Object.keys(req.body[fieldName]).length === 0) {
+              errors[fieldName] = [`${fieldName} must be a non-empty object`];
+            }
+          });
+
+        if (Object.keys(errors).length > 0) {
+            console.log('errors: ', errors);
+            return res.status(400).json({ errors });
+        }
         const pass = await PKPass.from({
             model: "./model/DBC.pass",
             certificates: {
@@ -68,7 +89,7 @@ app.post('/pass', async (req, res) => {
         const passName = Date.now() * 1000 * Math.floor(Math.random() * 9999);
 
         // storage to local file
-        // fs.writeFileSync(`${passName}.pkpass`, buffer);
+        fs.writeFileSync(`${passName}.pkpass`, buffer);
         console.log("Pass created successfully");
 
         res.setHeader('Content-Type', 'application/vnd.apple.pkpass');
@@ -78,7 +99,7 @@ app.post('/pass', async (req, res) => {
     }
     catch (error) {
         console.error('Error creating pass:', error);
-        res.status(500).send('An error occurred while creating the pass. : ', error.toString());
+        res.status(500).send('An error occurred while creating the pass.', error);
     }
 });
 
