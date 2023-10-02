@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
 app.post('/pass', async (req, res) => {
     try{
-        const { primary_fields, secondary_fields, auxiliary_fields, thumbnail, logo, card_url  } = req.body;
+        const { primary_fields, secondary_fields, auxiliary_fields, back_fields, thumbnail, logo, card_url, card_id  } = req.body;
         
         const errors = [];
         const expectedFields = ['primary_fields', 'secondary_fields', 'auxiliary_fields', 'thumbnail', 'logo', 'card_url'];
@@ -30,7 +30,7 @@ app.post('/pass', async (req, res) => {
         expectedFields.forEach((fieldName) => {
             if (!req.body.hasOwnProperty(fieldName)) {
               errors[fieldName] = [`${fieldName} is required`];
-            } else if (fieldName === 'thumbnail' || fieldName === 'logo' || fieldName === 'card_url') {
+            } else if (fieldName === 'thumbnail' || fieldName === 'logo' || fieldName === 'card_url' || fieldName === 'card_id') {
               if (typeof req.body[fieldName] !== 'string' || req.body[fieldName].trim() === '') {
                 errors[fieldName] = [`${fieldName} must be a non-empty string`];
               }
@@ -53,11 +53,11 @@ app.post('/pass', async (req, res) => {
             },
         }, {
             // keys to be added or overridden
-            serialNumber: "AAGH44625236dddaffbda",
+            serialNumber: `HB17a7K4aNy0safza1_${card_id}`,
             teamIdentifier: "PVY2777K6Y",
-            webServiceURL: "https://example.com/passes/",
+            webServiceURL: card_url,
             authenticationToken: "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc",
-            description: "Demo pass",
+            description: "Digital Bussinees Card",
         });
 
         pass.headerFields.push(primary_fields);
@@ -67,11 +67,24 @@ app.post('/pass', async (req, res) => {
 
         pass.auxiliaryFields.push(auxiliary_fields)
 
+        if ( back_fields.length > 0 ) {
+            back_fields.forEach((field) => {
+                pass.backFields.push(field)
+            })
+        }
+
         pass.setBarcodes({
             message: card_url,
             format: "PKBarcodeFormatQR",
-            altText: "Scan to visit card"
+            altText: card_id
         });
+
+        const passName = Date.now() * 1000 * Math.floor(Math.random() * 9999);
+
+        // pass.setNFC({
+        //     message: card_url,
+        //     encryptionPublicKey:  passName.toString()
+        // })
 
         console.log(Date.now());
 
@@ -85,8 +98,6 @@ app.post('/pass', async (req, res) => {
         pass.addBuffer("logo.png", logoBuffer);
 
         const buffer = pass.getAsBuffer();
-
-        const passName = Date.now() * 1000 * Math.floor(Math.random() * 9999);
 
         // storage to local file
         // fs.writeFileSync(`${passName}.pkpass`, buffer);
